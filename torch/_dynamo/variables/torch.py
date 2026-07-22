@@ -181,6 +181,8 @@ supported_ctx_manager_classes = dict.fromkeys(
         torch.autograd.graph.disable_saved_tensors_hooks,
         torch.cpu.amp.autocast_mode.autocast,
         torch.cuda.amp.autocast_mode.autocast,
+        torch.cuda.use_mem_pool,
+        torch.cuda.use_mem_pool.__wrapped__,  # type: ignore[attr-defined]
         torch.fx.traceback.annotate,
         torch.fx.traceback.annotate.__wrapped__,  # type: ignore[attr-defined]
         # We'll let Dynamo inline into the contextlib part of these context
@@ -698,6 +700,7 @@ class TorchCtxManagerClassVariable(BaseTorchVariable):
         kwargs: "dict[str, VariableTracker]",
     ) -> "VariableTracker":
         from . import (
+            CUDAMemPoolContextVariable,
             DisabledSavedTensorsHooksVariable,
             DualLevelContextManager,
             FSDPParamGroupUseTrainingStateVariable,
@@ -721,6 +724,39 @@ class TorchCtxManagerClassVariable(BaseTorchVariable):
                 return ctx.call_function(tx, args, kwargs)
             else:
                 return GradModeVariable.create(tx, False)
+        elif self.value in (
+            torch.cuda.use_mem_pool,
+            torch.cuda.use_mem_pool.__wrapped__,  # type: ignore[attr-defined]
+        ):
+            unexpected_kwargs = [k for k in kwargs if k not in ("pool", "device")]
+            if unexpected_kwargs:
+                raise_type_error(
+                    tx,
+                    "use_mem_pool() got an unexpected keyword argument "
+                    f"'{unexpected_kwargs[0]}'",
+                )
+            if args and "pool" in kwargs:
+                raise_type_error(
+                    tx, "use_mem_pool() got multiple values for argument 'pool'"
+                )
+            if len(args) > 1 and "device" in kwargs:
+                raise_type_error(
+                    tx, "use_mem_pool() got multiple values for argument 'device'"
+                )
+            if len(args) > 2:
+                raise_type_error(
+                    tx,
+                    "use_mem_pool() takes from 1 to 2 positional arguments "
+                    f"but {len(args)} were given",
+                )
+            if not args and "pool" not in kwargs:
+                raise_type_error(
+                    tx,
+                    "use_mem_pool() missing 1 required positional argument: 'pool'",
+                )
+            mempool = args[0] if args else kwargs["pool"]
+            device = args[1] if len(args) > 1 else kwargs.get("device")
+            return CUDAMemPoolContextVariable.create(tx, mempool, device)
         elif self.value is torch.enable_grad:
             if len(args) == 1 and isinstance(
                 args[0], variables.functions.BaseUserFunctionVariable
@@ -1336,6 +1372,26 @@ class TorchInGraphFunctionVariable(BaseTorchVariable):
             )
             return ConstantVariable.create(None)
 
+        @register(torch.set_autocast_dtype)
+        def handle_set_autocast_dtype(
+            self,
+            tx: "InstructionTranslatorBase",
+            device_type: VariableTracker,
+            dtype: VariableTracker,
+        ) -> VariableTracker:
+            tx.output.create_node(
+                "call_function",
+                torch.set_autocast_dtype,
+                (device_type.as_proxy(), dtype.as_proxy()),
+            )
+            dev_py_const = device_type.as_python_constant()
+            prev = torch.get_autocast_dtype(dev_py_const)
+            torch.set_autocast_dtype(dev_py_const, dtype.as_python_constant())
+            tx.output.add_cleanup_hook(
+                lambda: torch.set_autocast_dtype(dev_py_const, prev)
+            )
+            return ConstantVariable.create(None)
+
         @register(torch.set_autocast_cache_enabled)
         def handle_set_autocast_cache_enabled(
             self, tx: "InstructionTranslatorBase", enabled: VariableTracker
@@ -1549,7 +1605,7 @@ class TorchInGraphFunctionVariable(BaseTorchVariable):
                     ],
                 )
             real_value = arg.get_real_value()  # pyrefly: ignore[missing-attribute]
-            if isinstance(real_value, torch._subclasses.fake_tensor.FakeTensor):
+            if is_fake_tensor(real_value):
                 unimplemented(
                     gb_type="COW tensor check on FakeTensor",
                     context="torch._C._is_cow_tensor on FakeTensor",
