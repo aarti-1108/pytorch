@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # Dummy decorator for CPython test compatibility
 def no_rerun(reason):
@@ -61,6 +61,8 @@ def clear_typing_caches():
 
 
 class TypesTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_truth_values(self):
         if None: self.fail('None is true instead of false')
@@ -713,6 +715,8 @@ class TypesTests(CPythonTestCase):
 
 
 class UnionTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_or_types_operator(self):
         self.assertEqual(int | str, typing.Union[int, str])
@@ -1126,6 +1130,7 @@ class UnionTests(CPythonTestCase):
 
 
 class MappingProxyTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     mappingproxy = types.MappingProxyType
 
     def test_constructor(self):
@@ -1341,6 +1346,8 @@ class MappingProxyTests(CPythonTestCase):
 
 
 class ClassCreationTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     class Meta(type):
         def __init__(cls, name, bases, ns, **kw):
@@ -1831,6 +1838,8 @@ class ClassCreationTests(CPythonTestCase):
 
 
 class SimpleNamespaceTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_constructor(self):
         def check(ns, expected):
@@ -2078,6 +2087,7 @@ class SimpleNamespaceTests(CPythonTestCase):
 
 
 class CoroutineTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_wrong_args(self):
         samples = [None, 1, object()]
         for sample in samples:
@@ -2391,6 +2401,7 @@ class CoroutineTests(CPythonTestCase):
 
 
 class FunctionTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_function_type_defaults(self):
         def ex(a, /, b, *, c):
             return a + b + c
@@ -2424,6 +2435,8 @@ class FunctionTests(CPythonTestCase):
 
 
 class SubinterpreterTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @classmethod
     def setUpClass(cls):

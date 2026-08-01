@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, skipIfTorchDynamo
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, skipIfTorchDynamo
 
 # ======= END DYNAMO PATCH =======
 
@@ -154,6 +154,7 @@ AllTests = type("AllTests", (object,), d)
 del d, statictests, method, method_template
 
 class ClassTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         super().setUp()
         callLst[:] = []
@@ -894,6 +895,8 @@ class WithAttrs:
 
 @skipIfTorchDynamo("CPython only")
 class TestInlineValues(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_flags(self):
         self.assertEqual(Plain.__flags__ & Py_TPFLAGS_MANAGED_DICT, Py_TPFLAGS_MANAGED_DICT)

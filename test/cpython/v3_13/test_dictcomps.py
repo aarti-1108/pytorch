@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -26,6 +26,8 @@ g = "Global variable"
 
 
 class DictComprehensionTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basics(self):
         expected = {0: 10, 1: 11, 2: 12, 3: 13, 4: 14, 5: 15, 6: 16, 7: 17,

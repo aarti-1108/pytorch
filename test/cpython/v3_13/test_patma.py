@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -33,6 +33,8 @@ class Point:
 
 
 class TestCompiler(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @torch._dynamo.error_on_graph_break(False)
     def test_refleaks(self):
@@ -44,6 +46,8 @@ class TestCompiler(CPythonTestCase):
 
 
 class TestInheritance(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @staticmethod
     def check_sequence_then_mapping(x):
@@ -149,6 +153,8 @@ class TestInheritance(CPythonTestCase):
 
 
 class TestPatma(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_patma_000(self):
         match 0:
@@ -2908,6 +2914,8 @@ class TestPatma(CPythonTestCase):
 
 
 class TestSyntaxErrors(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def assert_syntax_error(self, code: str):
         with self.assertRaises(SyntaxError):
@@ -3242,6 +3250,8 @@ class TestSyntaxErrors(CPythonTestCase):
         """)
 
 class TestTypeErrors(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_accepts_positional_subpatterns_0(self):
         class Class:
@@ -3383,6 +3393,8 @@ class TestTypeErrors(CPythonTestCase):
 
 
 class TestValueErrors(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_mapping_pattern_checks_duplicate_key_1(self):
         class Keys:
@@ -3398,6 +3410,7 @@ class TestValueErrors(CPythonTestCase):
         self.assertIs(z, None)
 
 class TestSourceLocations(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_jump_threading(self):
         # See gh-123048
         def f():
@@ -3417,6 +3430,8 @@ class TestSourceLocations(CPythonTestCase):
                 self.assertIsNotNone(inst.positions.lineno, "jump without location")
 
 class TestTracing(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @staticmethod
     def _trace(func, *args, **kwargs):

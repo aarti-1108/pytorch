@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -159,6 +159,8 @@ class EmptyIterClass:
 # Main test suite
 
 class TestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     # Helper to check that an iterator returns a given sequence
     def check_iterator(self, it, seq, pickle=True):

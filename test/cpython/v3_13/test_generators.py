@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -76,6 +76,8 @@ except ImportError:
                      hasattr(_testcapi, "raise_SIGINT_then_send_None"),
                      "needs _testcapi.raise_SIGINT_then_send_None")
 class SignalAndYieldFromTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def generator1(self):
         return (yield from self.generator2())
@@ -100,6 +102,8 @@ class SignalAndYieldFromTest(__TestCase):
 
 
 class FinalizationTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_frame_resurrect(self):
         # A generator frame can be resurrected by a generator's finalization.
@@ -167,6 +171,8 @@ class FinalizationTest(__TestCase):
 
 
 class GeneratorTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_name(self):
         def func():
@@ -324,6 +330,7 @@ class GeneratorTest(__TestCase):
 
 
 class ModifyUnderlyingIterableTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     iterables = [
         range(0),
         range(20),
@@ -396,6 +403,7 @@ class ModifyUnderlyingIterableTest(__TestCase):
 
 
 class ExceptionTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # Tests for the issue #23353: check that the currently handled exception
     # is correctly saved/restored in PyEval_EvalFrameEx().
 
@@ -605,6 +613,8 @@ class ExceptionTest(__TestCase):
 
 
 class GeneratorCloseTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_close_no_return_value(self):
         def f():
@@ -707,6 +717,8 @@ class GeneratorCloseTest(__TestCase):
 
 
 class GeneratorThrowTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_exception_context_with_yield(self):
         def f():
@@ -806,6 +818,8 @@ class GeneratorThrowTest(__TestCase):
 
 
 class GeneratorStackTraceTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def check_stack_names(self, frame, expected):
         names = []
@@ -855,6 +869,7 @@ class GeneratorStackTraceTest(__TestCase):
 
 
 class YieldFromTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_generator_gi_yieldfrom(self):
         def a():
             self.assertEqual(inspect.getgeneratorstate(gen_b), inspect.GEN_RUNNING)

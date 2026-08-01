@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -60,6 +60,8 @@ This is complex because of changes due to PEP 237.
 import unittest
 
 class TestHexOctBin(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_hex_baseline(self):
         # A few upper/lowercase tests

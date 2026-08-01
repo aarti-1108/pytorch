@@ -11,6 +11,7 @@ import torch
 import torch._dynamo.test_case
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     skipIfTorchDynamo,
     slowTest,
@@ -133,6 +134,8 @@ picklecopiers = [lambda s, proto=proto: pickle.loads(pickle.dumps(s, proto))
                  for proto in range(pickle.HIGHEST_PROTOCOL + 1)]
 
 class TestBasicOps(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def pickletest(self, protocol, it, stop=4, take=1, compare=None):
         """Test that an iterator is the same after pickling, also when part-consumed"""
@@ -1943,6 +1946,8 @@ class TestBasicOps(__TestCase):
 
 
 class TestExamples(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_accumulate(self):
         self.assertEqual(list(accumulate([1,2,3,4,5])), [1, 3, 6, 10, 15])
@@ -2055,6 +2060,8 @@ class TestExamples(__TestCase):
 
 
 class TestPurePythonRoughEquivalents(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_batched_recipe(self):
         def batched_recipe(iterable, n):
@@ -2289,6 +2296,8 @@ class TestPurePythonRoughEquivalents(__TestCase):
 
 
 class TestGC(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def makecycle(self, iterator, container):
         container.append(iterator)
@@ -2489,6 +2498,8 @@ def L(seqn):
 
 
 class TestVariousIteratorArgs(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_accumulate(self):
         s = [1,2,3,4,5]
@@ -2668,6 +2679,8 @@ class TestVariousIteratorArgs(__TestCase):
             self.assertRaises(ZeroDivisionError, list, tee(E(s))[0])
 
 class LengthTransparency(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_repeat(self):
         self.assertEqual(operator.length_hint(repeat(None, 50)), 50)
@@ -2681,6 +2694,8 @@ class LengthTransparency(__TestCase):
         self.assertEqual(operator.length_hint(repeat(None, times=-2)), 0)
 
 class RegressionTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_sf_793826(self):
         # Fix Armin Rigo's successful efforts to wreak havoc
@@ -2775,6 +2790,7 @@ class RegressionTests(__TestCase):
 
 
 class SubclassWithKwargsTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_keywords_in_subclass(self):
         # count is not subclassable...
         testcases = [

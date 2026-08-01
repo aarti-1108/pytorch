@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, skipIfTorchDynamo
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, skipIfTorchDynamo
 
 __TestCase = CPythonTestCase
 
@@ -42,6 +42,7 @@ def pyrange_reversed(start, stop, step):
 
 
 class RangeTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def assert_iterators_equal(self, xs, ys, test_id, limit=None):
         # check that an iterator xs matches the expected results ys,
         # up to a given limit.

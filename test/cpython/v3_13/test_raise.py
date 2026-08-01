@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
 )
 
@@ -79,6 +80,7 @@ class Context:
 
 
 class TestRaise(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_invalid_reraise(self):
         try:
             raise
@@ -204,6 +206,8 @@ class TestRaise(__TestCase):
 
 
 class TestCause(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def testCauseSyntax(self):
         try:
@@ -277,6 +281,8 @@ class TestCause(__TestCase):
 
 
 class TestTraceback(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_sets_traceback(self):
         try:
@@ -298,6 +304,8 @@ class TestTraceback(__TestCase):
 
 
 class TestTracebackType(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def raiser(self):
         raise ValueError
@@ -364,6 +372,7 @@ class TestTracebackType(__TestCase):
 
 
 class TestContext(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_instance_context_instance_raise(self):
         context = IndexError()
         try:
@@ -554,6 +563,7 @@ class TestContext(__TestCase):
 
 
 class TestRemovedFunctionality(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_tuples(self):
         try:
             raise (IndexError, KeyError) # This should be a tuple!

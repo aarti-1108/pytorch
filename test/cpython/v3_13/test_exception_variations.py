@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     xfailIfTorchDynamo,
 )
@@ -57,6 +58,7 @@ sys.meta_path.insert(0, RedirectImportFinder())
 import unittest
 
 class ExceptTestCases(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_try_except_else_finally(self):
         hit_except = False
         hit_else = False

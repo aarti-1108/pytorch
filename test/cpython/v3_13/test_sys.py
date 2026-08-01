@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
 )
 
@@ -91,6 +92,8 @@ def requires_subinterpreters(meth):
 DICT_KEY_STRUCT_FORMAT = 'n2BI2n'
 
 class DisplayHookTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_original_displayhook(self):
         dh = sys.__displayhook__
@@ -140,6 +143,7 @@ class DisplayHookTest(__TestCase):
 
 
 class ActiveExceptionTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_exc_info_no_exception(self):
         self.assertEqual(sys.exc_info(), (None, None, None))
 
@@ -204,6 +208,8 @@ class ActiveExceptionTests(__TestCase):
 
 
 class ExceptHookTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @force_not_colorized
     def test_original_excepthook(self):
@@ -247,6 +253,8 @@ class ExceptHookTest(__TestCase):
 
 
 class SysModuleTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def tearDown(self):
         test.support.reap_children()
@@ -1406,6 +1414,7 @@ class SysModuleTest(__TestCase):
 
 @test.support.cpython_only
 class UnraisableHookTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_original_unraisablehook(self):
         _testcapi = import_helper.import_module('_testcapi')
         from _testcapi import err_writeunraisable, err_formatunraisable
@@ -1563,6 +1572,8 @@ class UnraisableHookTest(__TestCase):
 
 @test.support.cpython_only
 class SizeofTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         self.P = struct.calcsize('P')

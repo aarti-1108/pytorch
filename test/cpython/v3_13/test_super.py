@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -66,6 +66,8 @@ class G(A):
 
 
 class TestSuper(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def tearDown(self):
         # This fixes the damage that test_various___class___pathologies does.

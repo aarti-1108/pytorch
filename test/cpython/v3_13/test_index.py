@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -30,6 +30,7 @@ class TrapInt(int):
         return int(self)
 
 class BaseTestCase(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         super().setUp()
         self.o = newstyle()
@@ -181,6 +182,7 @@ class SeqTestCase:
 
 
 class ListTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = [0,10,20,30,40,50]
 
     def test_setdelitem(self):
@@ -237,23 +239,30 @@ class NewSeq:
 
 
 class TupleTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = (0,10,20,30,40,50)
 
 class ByteArrayTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = bytearray(b"this is a test")
 
 class BytesTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = b"this is a test"
 
 class StringTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = "this is a test"
 
 class NewSeqTestCase(SeqTestCase, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     seq = NewSeq((0,10,20,30,40,50))
 
 
 
 class RangeTestCase(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_range(self):
         n = newstyle()
@@ -263,6 +272,8 @@ class RangeTestCase(CPythonTestCase):
 
 
 class OverflowTestCase(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()

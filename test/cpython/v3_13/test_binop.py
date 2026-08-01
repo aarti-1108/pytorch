@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     skipIfTorchDynamo,
     run_tests,
 )
@@ -216,6 +217,7 @@ class Rat(object):
         return NotImplemented
 
 class RatTestCase(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     """Unit tests for Rat class and its support utilities."""
 
     def test_gcd(self):
@@ -390,6 +392,7 @@ B.register(V)
 
 
 class OperationOrderTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_comparison_orders(self):
         self.assertEqual(op_sequence(eq, A, A), ['A.__eq__', 'A.__eq__'])
         self.assertEqual(op_sequence(eq, A, B), ['A.__eq__', 'B.__eq__'])
@@ -435,6 +438,7 @@ class XN:
     __ne__ = None
 
 class FallbackBlockingTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     """Unit tests for None method blocking"""
 
     def test_fallback_rmethod_blocking(self):

@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -53,6 +53,7 @@ class Foo:
         return self.k1 + self.k2
 
 class KeywordOnlyArgTestCase(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def assertRaisesSyntaxError(self, codestr):
         def shouldRaiseSyntaxError(s):
             compile(s, "<test>", "single")

@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -104,6 +104,7 @@ complex_nans = [complex(x, y) for x, y in [
         ]]
 
 class CMathTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # list of all functions in cmath
     test_functions = [getattr(cmath, fname) for fname in [
             'acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh',

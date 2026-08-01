@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -95,24 +95,32 @@ class __TestTemporarilyImmutable(__TestInvariantWithoutMutations):
 ## ------- Concrete Type Tests -------
 
 class TestRepeat(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
         self.it = repeat(None, n)
 
 class TestXrange(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
         self.it = iter(range(n))
 
 class TestXrangeCustomReversed(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
         self.it = reversed(range(n))
 
 class TestTuple(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -121,6 +129,8 @@ class TestTuple(__TestInvariantWithoutMutations, CPythonTestCase):
 ## ------- Types that should not be mutated during iteration -------
 
 class TestDeque(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -129,6 +139,8 @@ class TestDeque(__TestTemporarilyImmutable, CPythonTestCase):
         self.mutate = d.pop
 
 class TestDequeReversed(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -137,6 +149,8 @@ class TestDequeReversed(__TestTemporarilyImmutable, CPythonTestCase):
         self.mutate = d.pop
 
 class TestDictKeys(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -145,6 +159,8 @@ class TestDictKeys(__TestTemporarilyImmutable, CPythonTestCase):
         self.mutate = d.popitem
 
 class TestDictItems(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -153,6 +169,8 @@ class TestDictItems(__TestTemporarilyImmutable, CPythonTestCase):
         self.mutate = d.popitem
 
 class TestDictValues(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -161,6 +179,8 @@ class TestDictValues(__TestTemporarilyImmutable, CPythonTestCase):
         self.mutate = d.popitem
 
 class TestSet(__TestTemporarilyImmutable, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -171,6 +191,8 @@ class TestSet(__TestTemporarilyImmutable, CPythonTestCase):
 ## ------- Types that can mutate during iteration -------
 
 class TestList(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -192,6 +214,8 @@ class TestList(__TestInvariantWithoutMutations, CPythonTestCase):
 
 
 class TestListReversed(__TestInvariantWithoutMutations, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def setUp(self):
         super().setUp()
@@ -239,6 +263,8 @@ class NoneLengthHint(object):
 
 
 class TestLengthHintExceptions(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_issue1242657(self):
         self.assertRaises(RuntimeError, list, BadLen())

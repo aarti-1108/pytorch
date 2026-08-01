@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -112,6 +112,8 @@ opmap = {
 }
 
 class VectorTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def checkfail(self, error, opname, *args):
         for op in opmap[opname]:
@@ -154,6 +156,8 @@ class VectorTest(CPythonTestCase):
                     self.assertRaises(TypeError, bool, op(a, b))
 
 class NumberTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basic(self):
         # Check that comparisons involving Number objects
@@ -207,6 +211,8 @@ class NumberTest(CPythonTestCase):
         self.checkvalue("ge", 1, 0, True )
 
 class MiscTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_misbehavin(self):
         class Misb:
@@ -298,6 +304,8 @@ class MiscTest(CPythonTestCase):
 
 
 class DictTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_dicts(self):
         # Verify that __eq__ and __ne__ work for dicts even if the keys and
@@ -323,6 +331,8 @@ class DictTest(CPythonTestCase):
                 self.assertRaises(TypeError, op, imag1a, imag2)
 
 class ListTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_coverage(self):
         # exercise all comparisons for lists

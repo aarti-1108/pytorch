@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -87,6 +87,8 @@ def memoize(func):
 # -----------------------------------------------
 
 class TestDecorators(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_single(self):
         class C(object):
@@ -321,6 +323,8 @@ class TestDecorators(CPythonTestCase):
 
 
 class TestClassDecorators(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_simple(self):
         def plain(x):

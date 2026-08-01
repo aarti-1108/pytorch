@@ -10,7 +10,7 @@
 import torch
 import torch._dynamo.test_case
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 # ======= END DYNAMO PATCH =======
@@ -174,6 +174,7 @@ def test_pickle_exception(assertion, exception, obj):
 test_pickle_exception.__test__ = False
 
 class TestHelpers(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # _is_descriptor, _is_sunder, _is_dunder
 
     sunder_names = '_bad_', '_good_', '_what_ho_'
@@ -1042,13 +1043,16 @@ class _FlagTests:
 
 
 class TestPlainEnumClass(_EnumTests, _PlainOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Enum
 
 class TestPlainEnumFunction(_EnumTests, _PlainOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Enum
 
 
 class TestPlainFlagClass(_EnumTests, _PlainOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Flag
 
     def test_none_member(self):
@@ -1069,10 +1073,12 @@ class TestPlainFlagClass(_EnumTests, _PlainOutputTests, _FlagTests, __TestCase):
 
 
 class TestPlainFlagFunction(_EnumTests, _PlainOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Flag
 
 
 class TestIntEnumClass(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = IntEnum
     #
     def test_shadowed_attr(self):
@@ -1085,6 +1091,7 @@ class TestIntEnumClass(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestIntEnumFunction(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = IntEnum
     #
     def test_shadowed_attr(self):
@@ -1095,6 +1102,7 @@ class TestIntEnumFunction(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestStrEnumClass(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = StrEnum
     #
     def test_shadowed_attr(self):
@@ -1108,6 +1116,7 @@ class TestStrEnumClass(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestStrEnumFunction(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = StrEnum
     #
     def test_shadowed_attr(self):
@@ -1119,38 +1128,47 @@ class TestStrEnumFunction(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestIntFlagClass(_EnumTests, _MinimalOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = IntFlag
 
 
 class TestIntFlagFunction(_EnumTests, _MinimalOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = IntFlag
 
 
 class TestMixedIntClass(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     class enum_type(int, Enum): pass
 
 
 class TestMixedIntFunction(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Enum('enum_type', type=int)
 
 
 class TestMixedStrClass(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     class enum_type(str, Enum): pass
 
 
 class TestMixedStrFunction(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Enum('enum_type', type=str)
 
 
 class TestMixedIntFlagClass(_EnumTests, _MixedOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     class enum_type(int, Flag): pass
 
 
 class TestMixedIntFlagFunction(_EnumTests, _MixedOutputTests, _FlagTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     enum_type = Flag('enum_type', type=int)
 
 
 class TestMixedDateClass(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [date(2021, 12, 25), date(2020, 3, 15), date(2019, 11, 27)]
     source_values = [(2021, 12, 25), (2020, 3, 15), (2019, 11, 27)]
@@ -1163,6 +1181,7 @@ class TestMixedDateClass(_EnumTests, _MixedOutputTests, __TestCase):
 
 
 class TestMixedDateFunction(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [date(2021, 12, 25), date(2020, 3, 15), date(2019, 11, 27)]
     source_values = [(2021, 12, 25), (2020, 3, 15), (2019, 11, 27)]
@@ -1176,6 +1195,7 @@ class TestMixedDateFunction(_EnumTests, _MixedOutputTests, __TestCase):
 
 
 class TestMinimalDateClass(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [date(2023, 12, 1), date(2016, 2, 29), date(2009, 1, 1)]
     source_values = [(2023, 12, 1), (2016, 2, 29), (2009, 1, 1)]
@@ -1188,6 +1208,7 @@ class TestMinimalDateClass(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestMinimalDateFunction(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [date(2023, 12, 1), date(2016, 2, 29), date(2009, 1, 1)]
     source_values = [(2023, 12, 1), (2016, 2, 29), (2009, 1, 1)]
@@ -1201,6 +1222,7 @@ class TestMinimalDateFunction(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestMixedFloatClass(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [1.1, 2.2, 3.3]
     #
@@ -1211,6 +1233,7 @@ class TestMixedFloatClass(_EnumTests, _MixedOutputTests, __TestCase):
 
 
 class TestMixedFloatFunction(_EnumTests, _MixedOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [1.1, 2.2, 3.3]
     #
@@ -1222,6 +1245,7 @@ class TestMixedFloatFunction(_EnumTests, _MixedOutputTests, __TestCase):
 
 
 class TestMinimalFloatClass(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [4.4, 5.5, 6.6]
     #
@@ -1232,6 +1256,7 @@ class TestMinimalFloatClass(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestMinimalFloatFunction(_EnumTests, _MinimalOutputTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     #
     values = [4.4, 5.5, 6.6]
     #
@@ -1243,6 +1268,7 @@ class TestMinimalFloatFunction(_EnumTests, _MinimalOutputTests, __TestCase):
 
 
 class TestSpecial(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """
     various operations that are not attributable to every possible enum
     """
@@ -3519,6 +3545,7 @@ class TestSpecial(__TestCase):
 
 
 class TestOrder(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     "test usage of the `_order_` attribute"
 
     def test_same_members(self):
@@ -3582,6 +3609,7 @@ class TestOrder(__TestCase):
 
 
 class OldTestFlag(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """Tests of the Flags."""
 
     class Perm(Flag):
@@ -4065,6 +4093,7 @@ class OldTestFlag(__TestCase):
 
 
 class OldTestIntFlag(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """Tests of the IntFlags."""
 
     class Perm(IntFlag):
@@ -4550,6 +4579,8 @@ class OldTestIntFlag(__TestCase):
 
 
 class TestEmptyAndNonLatinStrings(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_empty_string(self):
         with self.assertRaises(ValueError):
@@ -4567,6 +4598,8 @@ class TestEmptyAndNonLatinStrings(__TestCase):
 
 
 class TestUnique(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_unique_clean(self):
         @unique
@@ -4614,6 +4647,8 @@ class TestUnique(__TestCase):
             value = 4
 
 class TestVerify(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_continuous(self):
         @verify(CONTINUOUS)
@@ -4749,6 +4784,8 @@ class TestVerify(__TestCase):
 
 
 class TestInternals(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     sunder_names = '_bad_', '_good_', '_what_ho_'
     dunder_names = '__mal__', '__bien__', '__que_que__'
@@ -5049,6 +5086,8 @@ class Color(enum.Enum)
  |  __members__"""
 
 class TestStdLib(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     maxDiff = None
 
@@ -5304,6 +5343,8 @@ class TestStdLib(__TestCase):
 
 
 class MiscTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test__all__(self):
         support.check__all__(self, enum, not_exported={'bin', 'show_flag_values'})
@@ -5365,6 +5406,7 @@ COMPLEX_A = 2j
 COMPLEX_B = 3j
 
 class TestConvert(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def tearDown(self):
         # Reset the module-level test variables to their original integer
         # values, otherwise the already created enum values get converted
@@ -5474,6 +5516,7 @@ class TestConvert(__TestCase):
 
 
 class TestEnumDict(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_enum_dict_in_metaclass(self):
         """Test that EnumDict is usable as a class namespace"""
         class Meta(type):

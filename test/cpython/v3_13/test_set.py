@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     skipIfTorchDynamo,
     TEST_WITH_TORCHDYNAMO,
@@ -414,6 +415,7 @@ class _TestJointOps:
         support.check_free_after_iterating(self, iter, self.thetype)
 
 class TestSet(_TestJointOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     thetype = set
     basetype = set
 
@@ -734,6 +736,7 @@ class TestSetSubclass(TestSet):
 
 
 class TestFrozenSet(_TestJointOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     thetype = frozenset
     basetype = frozenset
 
@@ -871,6 +874,7 @@ class SetSubclassWithSlots(set):
     __slots__ = ('x', 'y', '__dict__')
 
 class TestSetSubclassWithSlots(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     thetype = SetSubclassWithSlots
     test_pickling = _TestJointOps.test_pickling
 
@@ -1001,6 +1005,7 @@ class _TestBasicOps:
 #------------------------------------------------------------------------------
 
 class TestBasicOpsEmpty(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "empty set"
         self.values = []
@@ -1013,6 +1018,7 @@ class TestBasicOpsEmpty(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsSingleton(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "unit set (number)"
         self.values = [3]
@@ -1031,6 +1037,7 @@ class TestBasicOpsSingleton(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsTuple(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "unit set (tuple)"
         self.values = [(0, "zero")]
@@ -1049,6 +1056,7 @@ class TestBasicOpsTuple(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsTriple(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "triple set"
         self.values = [0, "zero", operator.add]
@@ -1061,6 +1069,7 @@ class TestBasicOpsTriple(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsString(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "string set"
         self.values = ["a", "b", "c"]
@@ -1075,6 +1084,7 @@ class TestBasicOpsString(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsBytes(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.case   = "bytes set"
         self.values = [b"a", b"b", b"c"]
@@ -1089,6 +1099,7 @@ class TestBasicOpsBytes(_TestBasicOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestBasicOpsMixedStringBytes(_TestBasicOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.enterContext(warnings_helper.check_warnings())
         warnings.simplefilter('ignore', BytesWarning)
@@ -1112,6 +1123,7 @@ def gooditer():
     yield True
 
 class TestExceptionPropagation(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """SF 628246:  Set constructor should not trap iterator TypeErrors"""
 
     def test_instanceWithException(self):
@@ -1139,6 +1151,7 @@ class TestExceptionPropagation(__TestCase):
 #==============================================================================
 
 class TestSetOfSets(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_constructor(self):
         inner = frozenset([1])
         outer = set([inner])
@@ -1152,6 +1165,7 @@ class TestSetOfSets(__TestCase):
 #==============================================================================
 
 class TestBinaryOps(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set((2, 4, 6))
         super().setUp()
@@ -1226,6 +1240,7 @@ class TestBinaryOps(__TestCase):
 #==============================================================================
 
 class TestUpdateOps(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set((2, 4, 6))
         super().setUp()
@@ -1313,6 +1328,7 @@ class TestUpdateOps(__TestCase):
 #==============================================================================
 
 class TestMutate(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.values = ["a", "b", "c"]
         self.set = set(self.values)
@@ -1428,6 +1444,7 @@ class _TestSubsets:
 #------------------------------------------------------------------------------
 
 class TestSubsetEqualEmpty(_TestSubsets, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     left  = set()
     right = set()
     name  = "both empty"
@@ -1436,6 +1453,7 @@ class TestSubsetEqualEmpty(_TestSubsets, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestSubsetEqualNonEmpty(_TestSubsets, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     left  = set([1, 2])
     right = set([1, 2])
     name  = "equal pair"
@@ -1444,6 +1462,7 @@ class TestSubsetEqualNonEmpty(_TestSubsets, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestSubsetEmptyNonEmpty(_TestSubsets, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     left  = set()
     right = set([1, 2])
     name  = "one empty, one non-empty"
@@ -1452,6 +1471,7 @@ class TestSubsetEmptyNonEmpty(_TestSubsets, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestSubsetPartial(_TestSubsets, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     left  = set([1])
     right = set([1, 2])
     name  = "one a non-empty proper subset of other"
@@ -1460,6 +1480,7 @@ class TestSubsetPartial(_TestSubsets, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestSubsetNonOverlap(_TestSubsets, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     left  = set([1])
     right = set([2])
     name  = "neither empty, neither contains"
@@ -1584,6 +1605,7 @@ class _TestOnlySetsInBinaryOps:
 #------------------------------------------------------------------------------
 
 class TestOnlySetsNumeric(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set   = set((1, 2, 3))
         self.other = 19
@@ -1593,6 +1615,7 @@ class TestOnlySetsNumeric(_TestOnlySetsInBinaryOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestOnlySetsDict(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set   = set((1, 2, 3))
         self.other = {1:2, 3:4}
@@ -1602,6 +1625,7 @@ class TestOnlySetsDict(_TestOnlySetsInBinaryOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestOnlySetsOperator(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set   = set((1, 2, 3))
         self.other = operator.add
@@ -1611,6 +1635,7 @@ class TestOnlySetsOperator(_TestOnlySetsInBinaryOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestOnlySetsTuple(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set   = set((1, 2, 3))
         self.other = (2, 4, 6)
@@ -1620,6 +1645,7 @@ class TestOnlySetsTuple(_TestOnlySetsInBinaryOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestOnlySetsString(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set   = set((1, 2, 3))
         self.other = 'abc'
@@ -1629,6 +1655,7 @@ class TestOnlySetsString(_TestOnlySetsInBinaryOps, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestOnlySetsGenerator(_TestOnlySetsInBinaryOps, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         def gen():
             for i in range(0, 10, 2):
@@ -1662,6 +1689,7 @@ class _TestCopying:
 #------------------------------------------------------------------------------
 
 class TestCopyingEmpty(_TestCopying, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set()
         super().setUp()
@@ -1669,6 +1697,7 @@ class TestCopyingEmpty(_TestCopying, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestCopyingSingleton(_TestCopying, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set(["hello"])
         super().setUp()
@@ -1676,6 +1705,7 @@ class TestCopyingSingleton(_TestCopying, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestCopyingTriple(_TestCopying, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set(["zero", 0, None])
         super().setUp()
@@ -1683,6 +1713,7 @@ class TestCopyingTriple(_TestCopying, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestCopyingTuple(_TestCopying, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set([(1, 2)])
         super().setUp()
@@ -1690,6 +1721,7 @@ class TestCopyingTuple(_TestCopying, __TestCase):
 #------------------------------------------------------------------------------
 
 class TestCopyingNested(_TestCopying, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.set = set([((1, 2), (3, 4))])
         super().setUp()
@@ -1697,6 +1729,7 @@ class TestCopyingNested(_TestCopying, __TestCase):
 #==============================================================================
 
 class TestIdentities(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         self.a = set('abracadabra')
         self.b = set('alacazam')
@@ -1818,6 +1851,8 @@ def L(seqn):
     return chain(map(lambda x:x, R(Ig(G(seqn)))))
 
 class TestVariousIteratorArgs(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_constructor(self):
         for cons in (set, frozenset):
@@ -1876,6 +1911,7 @@ class bad_dict_clear:
         return 0
 
 class TestWeirdBugs(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     @unittest.skipIf(
         TEST_WITH_TORCHDYNAMO,
         "__build_class__ with closed over objects not supported",
@@ -2036,6 +2072,7 @@ class _TestBinaryOpsMutating(_TestOperationsMutating):
     "__build_class__ with closed over objects not supported",
 )
 class TestBinaryOpsMutating_Set_Set(_TestBinaryOpsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = set
 
@@ -2044,6 +2081,7 @@ class TestBinaryOpsMutating_Set_Set(_TestBinaryOpsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestBinaryOpsMutating_Subclass_Subclass(_TestBinaryOpsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = SetSubclass
     constructor2 = SetSubclass
 
@@ -2052,6 +2090,7 @@ class TestBinaryOpsMutating_Subclass_Subclass(_TestBinaryOpsMutating, __TestCase
     "__build_class__ with closed over objects not supported",
 )
 class TestBinaryOpsMutating_Set_Subclass(_TestBinaryOpsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = SetSubclass
 
@@ -2060,6 +2099,7 @@ class TestBinaryOpsMutating_Set_Subclass(_TestBinaryOpsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestBinaryOpsMutating_Subclass_Set(_TestBinaryOpsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = SetSubclass
     constructor2 = set
 
@@ -2105,6 +2145,7 @@ class _TestMethodsMutating(_TestOperationsMutating):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Set_Set(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = set
 
@@ -2113,6 +2154,7 @@ class TestMethodsMutating_Set_Set(_TestMethodsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Subclass_Subclass(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = SetSubclass
     constructor2 = SetSubclass
 
@@ -2121,6 +2163,7 @@ class TestMethodsMutating_Subclass_Subclass(_TestMethodsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Set_Subclass(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = SetSubclass
 
@@ -2129,6 +2172,7 @@ class TestMethodsMutating_Set_Subclass(_TestMethodsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Subclass_Set(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = SetSubclass
     constructor2 = set
 
@@ -2137,6 +2181,7 @@ class TestMethodsMutating_Subclass_Set(_TestMethodsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Set_Dict(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = dict.fromkeys
 
@@ -2145,6 +2190,7 @@ class TestMethodsMutating_Set_Dict(_TestMethodsMutating, __TestCase):
     "__build_class__ with closed over objects not supported",
 )
 class TestMethodsMutating_Set_List(_TestMethodsMutating, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     constructor1 = set
     constructor2 = list
 
@@ -2207,6 +2253,8 @@ def faces(G):
 
 
 class TestGraphs(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_cube(self):
 

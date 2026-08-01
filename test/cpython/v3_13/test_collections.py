@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, slowTest
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, slowTest
 
 __TestCase = CPythonTestCase
 
@@ -50,6 +50,7 @@ from collections.abc import ByteString, Buffer
 
 
 class TestUserObjects(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def _superset_test(self, a, b):
         self.assertGreaterEqual(
             set(dir(a)),
@@ -106,6 +107,8 @@ class TestUserObjects(__TestCase):
 ################################################################################
 
 class TestChainMap(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basics(self):
         c = ChainMap()
@@ -336,6 +339,8 @@ class TestChainMap(__TestCase):
 TestNT = namedtuple('TestNT', 'x y z')    # type used for pickle tests
 
 class TestNamedTuple(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_factory(self):
         Point = namedtuple('Point', 'x y')
@@ -744,6 +749,8 @@ class TestNamedTuple(__TestCase):
 ################################################################################
 
 class ABCTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def validate_abstract_methods(self, abc, *names):
         methodstubs = dict.fromkeys(names, lambda s, *args: 0)
@@ -810,6 +817,8 @@ def _test_gen():
     yield
 
 class TestOneTrickPonyABCs(ABCTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_Awaitable(self):
         def gen():
@@ -1439,6 +1448,8 @@ class WithSet(MutableSet):
         self.data.discard(item)
 
 class TestCollectionABCs(ABCTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     # XXX For now, we only test some virtual inheritance properties.
     # We should also test the proper behavior of the collection ABCs
@@ -2086,6 +2097,8 @@ class CounterSubclassWithGet(Counter):
         return Counter.get(self, key, default)
 
 class TestCounter(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basics(self):
         c = Counter('abcaba')

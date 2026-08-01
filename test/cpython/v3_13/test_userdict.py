@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -66,6 +66,7 @@ d4 = {"one": None, "two": None}
 d5 = {"one": 1, "two": 1}
 
 class UserDictTest(mapping_tests.TestHashMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
     type2test = collections.UserDict
 
     def test_all(self):

@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -163,6 +163,8 @@ class OtherFloatSubclass(float):
     pass
 
 class GeneralFloatCases(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_float(self):
         self.assertEqual(float(3.14), 3.14)
@@ -748,6 +750,7 @@ class GeneralFloatCases(__TestCase):
 
 @unittest.skipUnless(hasattr(float, "__getformat__"), "requires __getformat__")
 class FormatFunctionsTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_getformat(self):
         self.assertIn(float.__getformat__('double'),
                       ['unknown', 'IEEE, big-endian', 'IEEE, little-endian'])
@@ -773,6 +776,8 @@ LE_FLOAT_NAN = bytes(reversed(BE_FLOAT_NAN))
 # let's also try to guarantee that -0.0 and 0.0 don't get confused.
 
 class IEEEFormatTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.requires_IEEE_754
     def test_double_specials_do_unpack(self):
@@ -798,6 +803,8 @@ class IEEEFormatTestCase(__TestCase):
         self.assertEqual(struct.pack("<f", -3.40282356e38), struct.pack("<f", -FLT_MAX))
 
 class FormatTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_format(self):
         # these should be rewritten to use both format(x, spec) and
@@ -896,6 +903,7 @@ class FormatTestCase(__TestCase):
         self.assertEqual(format(-123.34, '00.10g'), '-123.34')
 
 class ReprTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     @torch._dynamo.error_on_graph_break(False)
     def test_repr(self):
         with open(os.path.join(os.path.split(__file__)[0],
@@ -962,6 +970,7 @@ class ReprTestCase(__TestCase):
 
 @support.requires_IEEE_754
 class RoundTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def assertFloatsAreIdentical(self, x, y):
         """assert that floats x and y are identical, in the sense that:
         (1) both x and y are nans, or
@@ -1107,6 +1116,7 @@ class RoundTestCase(__TestCase):
 # Beginning with Python 2.6 float has cross platform compatible
 # ways to create and represent inf and nan
 class InfNanTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_inf_from_str(self):
         self.assertTrue(isinf(float("inf")))
         self.assertTrue(isinf(float("+inf")))
@@ -1208,6 +1218,7 @@ class InfNanTest(__TestCase):
 fromHex = float.fromhex
 toHex = float.hex
 class HexFloatTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     MAX = fromHex('0x.fffffffffffff8p+1024')  # max normal
     MIN = fromHex('0x1p-1022')                # min normal
     TINY = fromHex('0x0.0000000000001p-1022') # min subnormal

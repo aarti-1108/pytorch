@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     slowTest,
     TEST_WITH_TORCHDYNAMO,
@@ -98,6 +99,7 @@ def check(tag, expected, raw, compare=None):
             return
 
 class TestBase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def testStressfully(self):
         # Try a variety of sizes at and around powers of 2, and at powers of 10.
         sizes = [0]
@@ -211,6 +213,8 @@ class TestBase(__TestCase):
 #==============================================================================
 
 class TestBugs(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @unittest.skipIf(
         TEST_WITH_TORCHDYNAMO,
@@ -256,6 +260,8 @@ class TestBugs(__TestCase):
 #==============================================================================
 
 class TestDecorateSortUndecorate(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_decorated(self):
         data = 'The quick Brown fox Jumped over The lazy Dog'.split()
@@ -385,6 +391,7 @@ def check_against_PyObject_RichCompareBool(self, L):
             #note: not assertEqual! We want to ensure *identical* behavior.
 
 class TestOptimizedCompares(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_safe_object_compare(self):
         heterogeneous_lists = [[0, 'foo'],
                                [0.0, 'foo'],

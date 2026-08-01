@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -89,6 +89,8 @@ class MyIndexable(object):
 
 
 class SliceTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_constructor(self):
         self.assertRaises(TypeError, slice)

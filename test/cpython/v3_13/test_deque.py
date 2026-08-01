@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     skipIfTorchDynamo,
     TEST_WITH_TORCHDYNAMO,
     run_tests,
@@ -52,6 +53,8 @@ class MutateCmp:
         return self.result
 
 class TestBasic(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basics(self):
         d = deque(range(-5125, -5000))
@@ -809,6 +812,8 @@ class TestBasic(CPythonTestCase):
         check(deque('a' * (42 * BLOCKLEN)), basesize + 43 * blocksize)
 
 class TestVariousIteratorArgs(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_constructor(self):
         for s in ("123", "", range(1000), ('do', 1.2), range(2000,2200,5)):
@@ -843,6 +848,8 @@ class DequeWithBadIter(deque):
         raise TypeError
 
 class TestSubclass(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basics(self):
         d = Deque(range(25))
@@ -949,11 +956,13 @@ class SubclassWithKwargs(deque):
         deque.__init__(self)
 
 class TestSubclassWithKwargs(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_subclass_with_kwargs(self):
         # SF bug #1486663 -- this used to erroneously raise a TypeError
         SubclassWithKwargs(newarg=1)
 
 class TestSequence(seq_tests.CommonTest):
+    hw_classification = HardwareClassification.GENERIC
     type2test = deque
 
     def test_getitem(self):

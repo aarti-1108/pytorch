@@ -14,7 +14,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -58,6 +58,7 @@ import unittest
 
 
 class TestPEP479(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_stopiteration_wrapping(self):
         def f():
             raise StopIteration

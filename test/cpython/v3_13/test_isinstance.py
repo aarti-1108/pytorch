@@ -10,7 +10,7 @@
 import torch
 import torch._dynamo.test_case
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 # ======= END DYNAMO PATCH =======
@@ -26,6 +26,7 @@ from test import support
 
 
 class TestIsInstanceExceptions(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # Test to make sure that an AttributeError when accessing the instance's
     # class's bases is masked.  This was actually a bug in Python 2.2 and
     # 2.2.1 where the exception wasn't caught but it also wasn't being cleared
@@ -118,6 +119,7 @@ class TestIsInstanceExceptions(__TestCase):
 # issubclass() instead of isinstance() -- really PyObject_IsSubclass()
 # vs. PyObject_IsInstance().
 class TestIsSubclassExceptions(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_dont_mask_non_attribute_error(self):
         class C(object):
             def getbases(self):
@@ -197,6 +199,7 @@ class Child(Super):
     pass
 
 class TestIsInstanceIsSubclass(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # Tests to ensure that isinstance and issubclass work on abstract
     # classes and instances.  Before the 2.2 release, TypeErrors were
     # raised when boolean values should have been returned.  The bug was

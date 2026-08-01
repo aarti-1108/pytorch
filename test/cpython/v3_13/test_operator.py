@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -649,10 +649,12 @@ class OperatorTestCase:
 
 
 class PyOperatorTestCase(OperatorTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_operator
 
 @unittest.skipUnless(c_operator, 'requires _operator')
 class COperatorTestCase(OperatorTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = c_operator
 
 
@@ -738,21 +740,25 @@ class OperatorPickleTestCase:
                 self.assertEqual(f2(a), f(a))
 
 class PyPyOperatorPickleTestCase(OperatorPickleTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_operator
     module2 = py_operator
 
 @unittest.skipUnless(c_operator, 'requires _operator')
 class PyCOperatorPickleTestCase(OperatorPickleTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_operator
     module2 = c_operator
 
 @unittest.skipUnless(c_operator, 'requires _operator')
 class CPyOperatorPickleTestCase(OperatorPickleTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = c_operator
     module2 = py_operator
 
 @unittest.skipUnless(c_operator, 'requires _operator')
 class CCOperatorPickleTestCase(OperatorPickleTestCase, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = c_operator
     module2 = c_operator
 

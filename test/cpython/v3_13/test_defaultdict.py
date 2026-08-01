@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
 )
 
@@ -67,6 +68,8 @@ def foobar():
     return list
 
 class TestDefaultDict(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basic(self):
         d1 = defaultdict()

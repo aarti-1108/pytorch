@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -56,6 +56,7 @@ class DummyIntegral(int):
 
 
 class HashTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def check_equal_hash(self, x, y):
         # check both that x and y are equal and that their hashes are equal
         self.assertEqual(hash(x), hash(y),
@@ -191,6 +192,7 @@ class HashTest(__TestCase):
         self.assertEqual(len(x), 1)
 
 class ComparisonTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_mixed_comparisons(self):
 
         # ordered list of distinct test values of various types:

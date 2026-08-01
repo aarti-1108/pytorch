@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     TEST_WITH_TORCHDYNAMO,
     xfailIfTorchDynamo,
@@ -70,6 +71,8 @@ from test.support import import_helper, get_c_recursion_limit
 
 
 class DictTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_invalid_keyword_arguments(self):
         class Custom(dict):
@@ -1714,6 +1717,8 @@ class DictTest(__TestCase):
 
 
 class CAPITest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     # Test _PyDict_GetItem_KnownHash()
     @support.cpython_only
@@ -1747,12 +1752,14 @@ class CAPITest(__TestCase):
 from test import mapping_tests
 
 class GeneralMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
     type2test = dict
 
 class Dict(dict):
     pass
 
 class SubclassMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
     type2test = Dict
 
 

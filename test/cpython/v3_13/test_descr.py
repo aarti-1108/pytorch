@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, TEST_WITH_TORCHDYNAMO
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, TEST_WITH_TORCHDYNAMO
 
 # ======= END DYNAMO PATCH =======
 
@@ -47,6 +47,8 @@ except ImportError:
 
 
 class OperatorsTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def __init__(self, *args, **kwargs):
         CPythonTestCase.__init__(self, *args, **kwargs)
@@ -423,6 +425,8 @@ class OperatorsTest(CPythonTestCase):
 
 
 class ClassPropertiesAndMethods(CPythonTestCase, ExtraAssertions):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_python_dicts(self):
         # Testing Python subclass of dict...
@@ -5096,6 +5100,7 @@ class ClassPropertiesAndMethods(CPythonTestCase, ExtraAssertions):
 
 
 class DictProxyTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         super().setUp()
         class C(object):
@@ -5161,6 +5166,7 @@ class DictProxyTests(CPythonTestCase):
 
 
 class AAAPTypesLongInitTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     # This is in its own TestCase so that it can be run before any other tests.
     # (Hence the 'AAA' in the test class name: to make it the first
     # item in a list sorted by name, like
@@ -5186,6 +5192,7 @@ class AAAPTypesLongInitTest(CPythonTestCase):
 
 
 class MiscTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     @unittest.skipIf(
         TEST_WITH_TORCHDYNAMO,
         "__build_class__ with closed over objects not supported",
@@ -5223,6 +5230,8 @@ class MiscTests(CPythonTestCase):
 
 
 class PicklingTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def _check_reduce(self, proto, obj, args=(), kwargs={}, state=None,
                       listitems=None, dictitems=None):
@@ -5665,6 +5674,8 @@ class PicklingTests(CPythonTestCase):
 
 
 class SharedKeyTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.cpython_only
     def test_subclasses(self):
@@ -5703,6 +5714,7 @@ class DebugHelperMeta(type):
 
 
 class MroTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     """
     Regressions for some bugs revealed through
     mcsl.mro() customization (typeobject.c: mro_internal()) and

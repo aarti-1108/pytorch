@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     TEST_WITH_TORCHDYNAMO,
     xfailIfTorchDynamo,
@@ -819,6 +820,8 @@ class _TriggerSideEffectOnEqual:
         raise NotImplementedError
 
 class PurePythonOrderedDictTests(OrderedDictTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     module = py_coll
     OrderedDict = py_coll.OrderedDict
@@ -844,6 +847,7 @@ class PurePythonOrderedDictTests(OrderedDictTests, __TestCase):
 
 
 class CPythonBuiltinDictTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """Builtin dict preserves insertion order.
 
     Reuse some of tests in OrderedDict selectively.
@@ -962,6 +966,7 @@ class CPythonOrderedDictSideEffects:
 class CPythonOrderedDictTests(OrderedDictTests,
                               CPythonOrderedDictSideEffects,
                               __TestCase):
+    hw_classification = HardwareClassification.GENERIC
 
     module = c_coll
     OrderedDict = c_coll.OrderedDict
@@ -1070,6 +1075,8 @@ class CPythonOrderedDictSubclassTests(CPythonOrderedDictTests):
 
 
 class PurePythonOrderedDictWithSlotsCopyingTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     module = py_coll
     class OrderedDict(py_coll.OrderedDict):
@@ -1079,6 +1086,8 @@ class PurePythonOrderedDictWithSlotsCopyingTests(__TestCase):
 
 @unittest.skipUnless(c_coll, 'requires the C version of the collections module')
 class CPythonOrderedDictWithSlotsCopyingTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     module = c_coll
     class OrderedDict(c_coll.OrderedDict):
@@ -1087,6 +1096,7 @@ class CPythonOrderedDictWithSlotsCopyingTests(__TestCase):
 
 
 class PurePythonGeneralMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
 
     @classmethod
     def setUpClass(cls):
@@ -1100,6 +1110,7 @@ class PurePythonGeneralMappingTests(mapping_tests.BasicTestMappingProtocol):
 
 @unittest.skipUnless(c_coll, 'requires the C version of the collections module')
 class CPythonGeneralMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
 
     @classmethod
     def setUpClass(cls):
@@ -1112,6 +1123,7 @@ class CPythonGeneralMappingTests(mapping_tests.BasicTestMappingProtocol):
 
 
 class PurePythonSubclassMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
 
     @classmethod
     def setUpClass(cls):
@@ -1127,6 +1139,7 @@ class PurePythonSubclassMappingTests(mapping_tests.BasicTestMappingProtocol):
 
 @unittest.skipUnless(c_coll, 'requires the C version of the collections module')
 class CPythonSubclassMappingTests(mapping_tests.BasicTestMappingProtocol):
+    hw_classification = HardwareClassification.GENERIC
 
     @classmethod
     def setUpClass(cls):
@@ -1208,6 +1221,8 @@ class SimpleLRUCacheTests:
 
 
 class PySimpleLRUCacheTests(SimpleLRUCacheTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     class type2test(SimpleLRUCache, py_coll.OrderedDict):
         pass
@@ -1215,6 +1230,8 @@ class PySimpleLRUCacheTests(SimpleLRUCacheTests, __TestCase):
 
 @unittest.skipUnless(c_coll, 'requires the C version of the collections module')
 class CSimpleLRUCacheTests(SimpleLRUCacheTests, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @classmethod
     def setUpClass(cls):

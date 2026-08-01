@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, TEST_WITH_TORCHDYNAMO
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, TEST_WITH_TORCHDYNAMO
 
 # ======= END DYNAMO PATCH =======
 
@@ -439,6 +439,7 @@ class _TestPartial:
 
 @unittest.skipUnless(c_functools, 'requires the C _functools module')
 class TestPartialC(_TestPartial, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     if c_functools:
         module = functools
         partial = functools.partial
@@ -485,6 +486,7 @@ class TestPartialC(_TestPartial, CPythonTestCase):
 
 
 class TestPartialPy(_TestPartial, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_functools
     partial = py_functools.partial
 
@@ -508,6 +510,8 @@ class TestPartialPySubclass(TestPartialPy):
     partial = PyPartialSubclass
 
 class TestPartialMethod(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     class A(object):
         nothing = functools.partialmethod(capture)
@@ -646,6 +650,8 @@ class TestPartialMethod(CPythonTestCase):
 
 
 class TestUpdateWrapper(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def check_wrapper(self, wrapper, wrapped,
                       assigned=functools.WRAPPER_ASSIGNMENTS,
@@ -912,6 +918,7 @@ class _TestReduce:
 
 @unittest.skipUnless(c_functools, 'requires the C _functools module')
 class TestReduceC(_TestReduce, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     if c_functools:
         if TEST_WITH_TORCHDYNAMO:
             reduce = functools.reduce
@@ -920,6 +927,7 @@ class TestReduceC(_TestReduce, CPythonTestCase):
 
 
 class TestReducePy(_TestReduce, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     reduce = staticmethod(py_functools.reduce)
 
 
@@ -1019,6 +1027,7 @@ class _TestCmpToKey:
 
 @unittest.skipUnless(c_functools, 'requires the C _functools module')
 class TestCmpToKeyC(_TestCmpToKey, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     if c_functools:
         if TEST_WITH_TORCHDYNAMO:
             cmp_to_key = functools.cmp_to_key
@@ -1034,10 +1043,13 @@ class TestCmpToKeyC(_TestCmpToKey, CPythonTestCase):
 
 
 class TestCmpToKeyPy(_TestCmpToKey, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     cmp_to_key = staticmethod(py_functools.cmp_to_key)
 
 
 class TestTotalOrdering(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_total_ordering_lt(self):
         @functools.total_ordering
@@ -1364,11 +1376,13 @@ class _TestCache:
 
 
 class TestCachePy(_TestCache, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_functools
 
 
 @unittest.skipUnless(c_functools, 'requires the C _functools module')
 class TestCacheC(_TestCache, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     if c_functools:
         module = c_functools
 
@@ -1980,6 +1994,7 @@ if c_functools:
 
 
 class TestLRUPy(_TestLRUU, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_functools
     cached_func = py_cached_func,
 
@@ -1995,6 +2010,7 @@ class TestLRUPy(_TestLRUU, CPythonTestCase):
 
 @unittest.skipUnless(c_functools, 'requires the C _functools module')
 class TestLRUC(_TestLRUU, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     if c_functools:
         module = c_functools
         cached_func = c_cached_func,
@@ -2010,6 +2026,7 @@ class TestLRUC(_TestLRUU, CPythonTestCase):
 
 
 class TestSingleDispatch(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_simple_overloads(self):
         @functools.singledispatch
         def g(obj):
@@ -3250,6 +3267,7 @@ class CachedCostItemWithSlots:
 
 
 class TestCachedProperty(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_cached(self):
         item = CachedCostItem()
         self.assertEqual(item.cost, 2)

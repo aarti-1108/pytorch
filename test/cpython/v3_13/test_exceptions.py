@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     skipIfTorchDynamo,
     xfailIfTorchDynamo,
@@ -103,6 +104,8 @@ class BrokenStrException(Exception):
 
 
 class ExceptionTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def raise_catch(self, exc, excname):
         with self.subTest(exc=exc, excname=excname):
@@ -1906,6 +1909,7 @@ class ExceptionTests(__TestCase):
 
 
 class NameErrorTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_name_error_has_name(self):
         try:
             bluch
@@ -1956,6 +1960,7 @@ class NameErrorTests(__TestCase):
 
 
 class AttributeErrorTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_attributes(self):
         # Setting 'attr' should not be a problem.
         exc = AttributeError('Ouch!')
@@ -1999,6 +2004,8 @@ class AttributeErrorTests(__TestCase):
 
 
 class ImportErrorTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_attributes(self):
         # Setting 'name' and 'path' should not be a problem.
@@ -2086,6 +2093,7 @@ def run_script(source):
     return err.decode('utf-8').splitlines()
 
 class AssertionErrorTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def tearDown(self):
         unlink(TESTFN)
 
@@ -2221,6 +2229,7 @@ class AssertionErrorTests(__TestCase):
 
 @support.force_not_colorized_test_class
 class SyntaxErrorTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     maxDiff = None
 
     @force_not_colorized
@@ -2469,6 +2478,7 @@ class SyntaxErrorTests(__TestCase):
 
 
 class TestInvalidExceptionMatcher(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_except_star_invalid_exception_type(self):
         with self.assertRaises(TypeError):
             try:
@@ -2484,6 +2494,8 @@ class TestInvalidExceptionMatcher(__TestCase):
 
 
 class PEP626Tests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def lineno_after_raise(self, f, *expected):
         try:

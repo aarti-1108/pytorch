@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -125,6 +125,7 @@ class MockNested(Nested):
 
 
 class FailureTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def testNameError(self):
         def fooNotDeclared():
             with foo: pass
@@ -259,6 +260,7 @@ class ContextmanagerAssertionMixin(object):
 
 
 class NonexceptionalTestCase(__TestCase, ContextmanagerAssertionMixin):
+    hw_classification = HardwareClassification.GENERIC
     def testInlineGeneratorSyntax(self):
         with mock_contextmanager_generator():
             pass
@@ -312,6 +314,7 @@ class NonexceptionalTestCase(__TestCase, ContextmanagerAssertionMixin):
 
 class NestedNonexceptionalTestCase(__TestCase,
     ContextmanagerAssertionMixin):
+    hw_classification = HardwareClassification.GENERIC
     def testSingleArgInlineGeneratorSyntax(self):
         with Nested(mock_contextmanager_generator()):
             pass
@@ -377,6 +380,7 @@ class NestedNonexceptionalTestCase(__TestCase,
 
 
 class ExceptionalTestCase(ContextmanagerAssertionMixin, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def testSingleResource(self):
         cm = mock_contextmanager_generator()
         def shouldThrow():
@@ -572,6 +576,8 @@ class ExceptionalTestCase(ContextmanagerAssertionMixin, __TestCase):
 
 
 class NonLocalFlowControlTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def testWithBreak(self):
         counter = 0
@@ -629,6 +635,8 @@ class NonLocalFlowControlTestCase(__TestCase):
 
 
 class AssignmentTargetTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def testSingleComplexTarget(self):
         targets = {1: [0, 1, 2]}
@@ -673,6 +681,8 @@ class AssignmentTargetTestCase(__TestCase):
 
 
 class ExitSwallowsExceptionTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def testExitTrueSwallowsException(self):
         class AfricanSwallow:
@@ -698,6 +708,8 @@ class ExitSwallowsExceptionTestCase(__TestCase):
 
 
 class NestedWith(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     class Dummy(object):
         def __init__(self, value=None, gobble=False):

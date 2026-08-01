@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     run_tests,
     slowTest,
     xfailIfTorchDynamo,
@@ -177,6 +178,8 @@ class WithComplex:
         return self.value
 
 class ComplexTest(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def assertFloatIdentical(self, x, y):
         """Fail unless floats x and y are identical, in the sense that:

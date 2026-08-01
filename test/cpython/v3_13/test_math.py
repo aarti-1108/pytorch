@@ -13,6 +13,7 @@ import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
 from torch.testing._internal.common_utils import (
+    HardwareClassification,
     slowTest,
     run_tests,
     skipIfTorchDynamo,
@@ -301,6 +302,8 @@ class BadDescr:
         raise ValueError
 
 class MathTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def ftest(self, name, got, expected, ulp_tol=5, abs_tol=0.0):
         """Compare arguments expected and got, as floats, if either
@@ -2569,6 +2572,7 @@ class MathTests(__TestCase):
 
 
 class IsCloseTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     isclose = math.isclose  # subclasses should override this
 
     def assertIsClose(self, a, b, *args, **kwargs):
@@ -2692,6 +2696,7 @@ class IsCloseTests(__TestCase):
 
 
 class FMATests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     """ Tests for math.fma. """
 
     def test_fma_nan_results(self):

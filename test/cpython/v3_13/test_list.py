@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, TEST_WITH_TORCHDYNAMO
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, TEST_WITH_TORCHDYNAMO
 
 __TestCase = CPythonTestCase
 
@@ -61,6 +61,7 @@ import pickle
 import unittest
 
 class ListTest(list_tests.CommonTest):
+    hw_classification = HardwareClassification.GENERIC
     type2test = list
 
     def test_basic(self):

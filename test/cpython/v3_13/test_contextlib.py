@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, slowTest
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, slowTest
 
 __TestCase = CPythonTestCase
 
@@ -69,6 +69,8 @@ import weakref
 
 
 class TestAbstractContextManager(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_enter(self):
         class DefaultEnter(AbstractContextManager):
@@ -122,6 +124,8 @@ class TestAbstractContextManager(__TestCase):
 
 
 class ContextManagerTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_contextmanager_plain(self):
         state = []
@@ -452,6 +456,8 @@ def woohoo():
 
 
 class ClosingTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.requires_docstrings
     def test_instance_docs(self):
@@ -486,6 +492,7 @@ class ClosingTestCase(__TestCase):
 
 
 class NullcontextTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_nullcontext(self):
         class C:
             pass
@@ -495,6 +502,8 @@ class NullcontextTestCase(__TestCase):
 
 
 class FileContextTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @torch._dynamo.error_on_graph_break(False)
     def testWithOpen(self):
@@ -514,6 +523,8 @@ class FileContextTestCase(__TestCase):
             os_helper.unlink(tfn)
 
 class LockContextTestCase(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def boilerPlate(self, lock, locked):
         self.assertFalse(locked())
@@ -577,6 +588,8 @@ class mycontext(ContextDecorator):
 
 
 class TestContextDecorator(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.requires_docstrings
     def test_instance_docs(self):
@@ -1199,6 +1212,7 @@ class _TestBaseExitStack:
 
 
 class TestExitStack(_TestBaseExitStack, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     exit_stack = ExitStack
     callback_error_internal_frames = [
         ('__exit__', 'raise exc'),
@@ -1264,18 +1278,24 @@ class _TestRedirectStream:
 
 
 class TestRedirectStdout(_TestRedirectStream, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     redirect_stream = redirect_stdout
     orig_stream = "stdout"
 
 
 class TestRedirectStderr(_TestRedirectStream, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     redirect_stream = redirect_stderr
     orig_stream = "stderr"
 
 
 class TestSuppress(ExceptionIsLikeMixin, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.requires_docstrings
     def test_instance_docs(self):
@@ -1373,6 +1393,7 @@ class TestSuppress(ExceptionIsLikeMixin, __TestCase):
 
 
 class TestChdir(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def make_relative_path(self, *parts):
         return os.path.join(
             os.path.dirname(os.path.realpath(__file__)),

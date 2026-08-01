@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -34,6 +34,7 @@ class seq(base_set):
         return [self.el][n]
 
 class TestContains(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_common_tests(self):
         a = base_set(1)
         b = myset(1)

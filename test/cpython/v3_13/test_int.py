@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, skipIfTorchDynamo
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, skipIfTorchDynamo
 
 __TestCase = CPythonTestCase
 
@@ -166,6 +166,8 @@ class IntSubclass(int):
     pass
 
 class IntTestCases(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     def test_basic(self):
         self.assertEqual(int(314), 314)
@@ -737,6 +739,8 @@ class IntTestCases(__TestCase):
 
 
 class IntStrDigitLimitsTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     int_class = int  # Override this in subclasses to reuse the suite.
 
@@ -948,6 +952,7 @@ class IntSubclassStrDigitLimitsTests(IntStrDigitLimitsTests):
 
 
 class PyLongModuleTests(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     # Tests of the functions in _pylong.py.  Those get used when the
     # number of digits in the input values are large enough.
 

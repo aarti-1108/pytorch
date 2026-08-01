@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -70,6 +70,7 @@ RUN_ALL_HASH_TESTS = False
 JUST_SHOW_HASH_RESULTS = False # if RUN_ALL_HASH_TESTS, just display
 
 class TupleTest(seq_tests.CommonTest):
+    hw_classification = HardwareClassification.GENERIC
     type2test = tuple
 
     def test_getitem_error(self):

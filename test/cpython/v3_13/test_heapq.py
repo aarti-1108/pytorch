@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests, TEST_WITH_TORCHDYNAMO
+from torch.testing._internal.common_utils import HardwareClassification, run_tests, TEST_WITH_TORCHDYNAMO
 
 __TestCase = CPythonTestCase
 
@@ -37,6 +37,7 @@ func_names = ['heapify', 'heappop', 'heappush', 'heappushpop', 'heapreplace',
               '_heappop_max', '_heapreplace_max', '_heapify_max']
 
 class TestModules(__TestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_py_functions(self):
         for fname in func_names:
             self.assertEqual(getattr(py_heapq, fname).__module__, 'heapq')
@@ -273,11 +274,13 @@ class _TestHeap:
 
 
 class TestHeapPython(_TestHeap, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_heapq
 
 
 @skipUnless(c_heapq, 'requires _heapq')
 class TestHeapC(_TestHeap, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = c_heapq
 
 
@@ -489,10 +492,12 @@ class _TestErrorHandling:
         self.assertRaises((IndexError, RuntimeError), self.module.heappush, list2, h(1))
 
 class TestErrorHandlingPython(_TestErrorHandling, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = py_heapq
 
 @skipUnless(c_heapq, 'requires _heapq')
 class TestErrorHandlingC(_TestErrorHandling, __TestCase):
+    hw_classification = HardwareClassification.GENERIC
     module = c_heapq
 
 

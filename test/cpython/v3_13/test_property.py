@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -96,6 +96,7 @@ class PropertyNewGetter(object):
         return 8
 
 class PropertyTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_property_decorator_baseclass(self):
         # see #1620
         base = BaseClass()
@@ -312,6 +313,8 @@ class PropertySubSlots(property):
     __slots__ = ()
 
 class PropertySubclassTests(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
+
 
     @support.requires_docstrings
     def test_slots_docstring_copy_exception(self):
@@ -602,6 +605,7 @@ class _PropertyUnreachableAttribute:
 
 
 class PropertyUnreachableAttributeWithName(_PropertyUnreachableAttribute, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     msg_format = r"^property 'foo' of 'PropertyUnreachableAttributeWithName\.cls' object {}$"
 
     class cls:
@@ -609,6 +613,7 @@ class PropertyUnreachableAttributeWithName(_PropertyUnreachableAttribute, CPytho
 
 
 class PropertyUnreachableAttributeNoName(_PropertyUnreachableAttribute, CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     msg_format = r"^property of 'PropertyUnreachableAttributeNoName\.cls' object {}$"
 
     class cls:

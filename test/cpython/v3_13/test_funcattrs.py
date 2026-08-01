@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -38,6 +38,7 @@ def global_function():
 
 
 class FuncAttrsTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def setUp(self):
         super().setUp()
         class F:
@@ -450,6 +451,7 @@ def empty_cell(empty=True):
 
 
 class CellTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_comparison(self):
         # These tests are here simply to exercise the comparison code;
         # their presence should not be interpreted as providing any
@@ -463,6 +465,7 @@ class CellTest(CPythonTestCase):
 
 
 class StaticMethodAttrsTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_func_attribute(self):
         def f():
             pass
@@ -475,6 +478,7 @@ class StaticMethodAttrsTest(CPythonTestCase):
 
 
 class BuiltinFunctionPropertiesTest(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     # XXX Not sure where this should really go since I can't find a
     # test module specifically for builtin_function_or_method.
 

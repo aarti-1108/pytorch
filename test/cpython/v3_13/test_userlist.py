@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 __TestCase = CPythonTestCase
 
@@ -61,6 +61,7 @@ from test import support
 
 
 class UserListTest(list_tests.CommonTest):
+    hw_classification = HardwareClassification.GENERIC
     type2test = UserList
 
     def test_getslice(self):

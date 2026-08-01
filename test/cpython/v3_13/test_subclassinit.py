@@ -12,7 +12,7 @@ import torch
 import torch._dynamo.test_case
 import unittest
 from torch._dynamo.test_case import CPythonTestCase
-from torch.testing._internal.common_utils import run_tests
+from torch.testing._internal.common_utils import HardwareClassification, run_tests
 
 # ======= END DYNAMO PATCH =======
 
@@ -21,6 +21,7 @@ import unittest
 
 
 class Test(CPythonTestCase):
+    hw_classification = HardwareClassification.GENERIC
     def test_init_subclass(self):
         class A:
             initialized = False
