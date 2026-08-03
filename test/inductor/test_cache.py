@@ -1001,8 +1001,9 @@ class AllGatherBucketCacheKeyTest(TestCase):
         from torch._subclasses.fake_tensor import FakeTensorMode
         from torch.fx.experimental.proxy_tensor import make_fx
 
+        device = "cuda" if torch.cuda.is_available() else "cpu"
         with FakeTensorMode():
-            ins = [torch.randn(128, 256, device="cuda") for _ in range(2)]
+            ins = [torch.randn(128, 256, device=device) for _ in range(2)]
             gm0 = make_fx(all_gather_merge_fn_to_trace)(
                 ins, "0", 2, torch.float32, [torch.float32, torch.float32], 0
             )
